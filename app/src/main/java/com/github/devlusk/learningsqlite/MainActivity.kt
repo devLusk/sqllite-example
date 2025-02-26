@@ -4,24 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.github.devlusk.learningsqlite.ui.theme.LearningSQLiteTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,39 +28,45 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputScreen(modifier: Modifier = Modifier) {
+    val (firstName, setFirstName) = remember { mutableStateOf("") }
+    val (lastName, setLastName) = remember { mutableStateOf("") }
+
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(horizontal = 24.dp)
+                .padding(top = 20.dp, start = 20.dp, end = 20.dp)
                 .fillMaxSize()
         ) {
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("First Name") },
+                value = firstName,
+                onValueChange = setFirstName,
+                label = { Text("First name") },
                 placeholder = { Text("e.g: Lucas") },
                 modifier = Modifier.fillMaxWidth()
-
             )
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                label = { Text("Last Name") },
+                value = lastName,
+                onValueChange = setLastName,
+                label = { Text("Last name") },
                 placeholder = { Text("e.g: Lucas") },
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             Button(
                 onClick = {},
-                shape = RoundedCornerShape(30),
-                modifier = Modifier.fillMaxWidth()
+                shape = RoundedCornerShape(20),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
             ) {
-                Text("SAVE")
+                Text(
+                    text = "Save",
+                    fontSize = 15.sp
+                )
             }
         }
     }
@@ -77,5 +75,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
 @Preview(showSystemUi = true)
 @Composable
 private fun InputScreenPreview() {
-    InputScreen()
+    LearningSQLiteTheme {
+        InputScreen()
+    }
 }
