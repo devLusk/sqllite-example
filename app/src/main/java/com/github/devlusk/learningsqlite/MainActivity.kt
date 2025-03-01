@@ -1,6 +1,7 @@
 package com.github.devlusk.learningsqlite
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
 fun InputScreen(modifier: Modifier = Modifier) {
     val (firstName, setFirstName) = remember { mutableStateOf("") }
     val (lastName, setLastName) = remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -42,20 +45,46 @@ fun InputScreen(modifier: Modifier = Modifier) {
         ) {
             OutlinedTextField(
                 value = firstName,
-                onValueChange = setFirstName,
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isLetter() }) {
+                        setFirstName(newValue)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Error: Unsupported character entered.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
                 label = { Text("First name") },
                 placeholder = { Text("e.g: Lucas") },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.height(10.dp))
+
             OutlinedTextField(
                 value = lastName,
-                onValueChange = setLastName,
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isLetter() }) {
+                        setLastName(newValue)
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Error. Unsupported character entered.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                },
                 label = { Text("Last name") },
-                placeholder = { Text("e.g: Lucas") },
+                placeholder = { Text("e.g: Silva") },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
+
             Spacer(modifier = Modifier.height(20.dp))
+
             Button(
                 onClick = {},
                 shape = RoundedCornerShape(20),
