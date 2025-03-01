@@ -34,11 +34,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun InputScreen(modifier: Modifier = Modifier) {
-    val (firstName, setFirstName) = remember { mutableStateOf("") }
-    val (lastName, setLastName) = remember { mutableStateOf("") }
     val context = LocalContext.current
     val sqLiteHelper = SQLiteHelper(context)
     val members = sqLiteHelper.getAllValues()
+
+    val (firstName, setFirstName) = remember { mutableStateOf("") }
+    val (lastName, setLastName) = remember { mutableStateOf("") }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -81,6 +82,8 @@ fun InputScreen(modifier: Modifier = Modifier) {
                     fontSize = 15.sp
                 )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             DataList(members)
         }
