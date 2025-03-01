@@ -33,6 +33,31 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         db.insert(TABLE_NAME, null, contentValues)
     }
 
+    fun getAllValues(): List<Member> {
+        val db = readableDatabase
+        val cursor = db.query(
+            TABLE_NAME,
+            arrayOf(FIRST_NAME, LAST_NAME),
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        val members = mutableListOf<Member>()
+
+        while (cursor.moveToNext()) {
+            val firstName = cursor.getString(cursor.getColumnIndex(FIRST_NAME))
+            val lastName = cursor.getString(cursor.getColumnIndex(LAST_NAME))
+            members.add(Member(firstName, lastName))
+        }
+
+        cursor.close()
+
+        return members
+    }
+
     companion object {
         private const val DATABASE_NAME = "Database.db"
         private const val TABLE_NAME = "Members"
