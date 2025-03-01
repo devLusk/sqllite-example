@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.devlusk.learningsqlite.composable.DataList
 import com.github.devlusk.learningsqlite.composable.ValidatedTextField
 import com.github.devlusk.learningsqlite.domain.SQLiteHelper
 import com.github.devlusk.learningsqlite.ui.theme.LearningSQLiteTheme
@@ -37,6 +38,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
     val (lastName, setLastName) = remember { mutableStateOf("") }
     val context = LocalContext.current
     val sqLiteHelper = SQLiteHelper(context)
+    val members = sqLiteHelper.getAllValues()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -79,6 +81,8 @@ fun InputScreen(modifier: Modifier = Modifier) {
                     fontSize = 15.sp
                 )
             }
+
+            DataList(members)
         }
     }
 }
