@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.devlusk.learningsqlite.composable.ValidatedTextField
+import com.github.devlusk.learningsqlite.domain.SQLiteHelper
 import com.github.devlusk.learningsqlite.ui.theme.LearningSQLiteTheme
 
 class MainActivity : ComponentActivity() {
@@ -35,6 +36,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
     val (firstName, setFirstName) = remember { mutableStateOf("") }
     val (lastName, setLastName) = remember { mutableStateOf("") }
     val context = LocalContext.current
+    val sqLiteHelper = SQLiteHelper(context)
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -64,7 +66,9 @@ fun InputScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
-                onClick = {},
+                onClick = {
+                    sqLiteHelper!!.insertValues(firstName, lastName)
+                },
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
                     .fillMaxWidth()

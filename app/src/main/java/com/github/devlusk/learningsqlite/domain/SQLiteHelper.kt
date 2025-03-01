@@ -1,5 +1,6 @@
 package com.github.devlusk.learningsqlite.domain
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
@@ -7,10 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper
 class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
-        db?.execSQL("CREATE TABLE $TABLE_NAME (" +
-                "$ID INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "$FIRST_NAME TEXT," +
-                "$LAST_NAME TEXT)")
+        db?.execSQL(
+            "CREATE TABLE $TABLE_NAME (" +
+                    "$ID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "$FIRST_NAME TEXT," +
+                    "$LAST_NAME TEXT)"
+        )
     }
 
     override fun onUpgrade(
@@ -19,6 +22,15 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         newVersion: Int
     ) {
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+    }
+
+    fun insertValues(firstName: String?, lastName: String?) {
+        val db = writableDatabase
+        val contentValues = ContentValues()
+
+        contentValues.put(FIRST_NAME, firstName)
+        contentValues.put(LAST_NAME, lastName)
+        db.insert(TABLE_NAME, null, contentValues)
     }
 
     companion object {
