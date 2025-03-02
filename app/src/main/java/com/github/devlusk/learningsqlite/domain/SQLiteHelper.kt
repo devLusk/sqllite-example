@@ -37,7 +37,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val db = readableDatabase
         val cursor = db.query(
             TABLE_NAME,
-            arrayOf(ID, FIRST_NAME, LAST_NAME),
+            arrayOf(FIRST_NAME, ID, LAST_NAME),
             null,
             null,
             null,
@@ -47,10 +47,14 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
 
         val members = mutableListOf<Member>()
 
+        val idIndex = cursor.getColumnIndex(ID)
+        val firstNameIndex = cursor.getColumnIndex(FIRST_NAME)
+        val lastNameIndex = cursor.getColumnIndex(LAST_NAME)
+
         while (cursor.moveToNext()) {
-            val id = cursor.getInt(cursor.getColumnIndex(ID))
-            val firstName = cursor.getString(cursor.getColumnIndex(FIRST_NAME))
-            val lastName = cursor.getString(cursor.getColumnIndex(LAST_NAME))
+            val id = cursor.getInt(idIndex)
+            val firstName = cursor.getString(firstNameIndex)
+            val lastName = cursor.getString(lastNameIndex)
             members.add(Member(id, firstName, lastName))
         }
 
