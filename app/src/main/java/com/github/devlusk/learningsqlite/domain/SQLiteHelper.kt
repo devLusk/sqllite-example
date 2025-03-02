@@ -37,7 +37,7 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val db = readableDatabase
         val cursor = db.query(
             TABLE_NAME,
-            arrayOf(FIRST_NAME, LAST_NAME),
+            arrayOf(ID, FIRST_NAME, LAST_NAME),
             null,
             null,
             null,
@@ -48,9 +48,10 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         val members = mutableListOf<Member>()
 
         while (cursor.moveToNext()) {
+            val id = cursor.getInt(cursor.getColumnIndex(ID))
             val firstName = cursor.getString(cursor.getColumnIndex(FIRST_NAME))
             val lastName = cursor.getString(cursor.getColumnIndex(LAST_NAME))
-            members.add(Member(firstName, lastName))
+            members.add(Member(id, firstName, lastName))
         }
 
         cursor.close()
@@ -58,9 +59,9 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return members
     }
 
-    fun deleteByFirstName(firstName: String) {
+    fun deleteById(id: Int) {
         val db = writableDatabase
-        db.delete(TABLE_NAME, "$FIRST_NAME = ?", arrayOf(firstName))
+        db.delete(TABLE_NAME, "$ID = ?", arrayOf(id.toString()))
     }
 
     companion object {

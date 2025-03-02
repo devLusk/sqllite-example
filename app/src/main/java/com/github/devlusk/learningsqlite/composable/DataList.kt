@@ -65,8 +65,7 @@ fun DataList(
 private fun DataListPreview() {
     DataList(
         list = listOf(
-            Member(firstName = "Lucas", lastName = "Silva"),
-            Member(firstName = "Carlos", lastName = "Oliveira")
+            Member(id= 0, firstName = "Lucas", lastName = "Silva")
         ),
         onDelete = {}
     )

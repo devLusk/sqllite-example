@@ -87,7 +87,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(20.dp))
 
             DataList(members.value) { member ->
-                sqLiteHelper.deleteByFirstName(member.firstName)
+                sqLiteHelper.deleteById(member.id)
                 members.value = sqLiteHelper.getAllValues()
             }
 
