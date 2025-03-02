@@ -58,6 +58,11 @@ class SQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, 
         return members
     }
 
+    fun deleteByFirstName(firstName: String) {
+        val db = writableDatabase
+        db.delete(TABLE_NAME, "$FIRST_NAME = ?", arrayOf(firstName))
+    }
+
     companion object {
         private const val DATABASE_NAME = "Database.db"
         private const val TABLE_NAME = "Members"

@@ -36,10 +36,10 @@ class MainActivity : ComponentActivity() {
 fun InputScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val sqLiteHelper = SQLiteHelper(context)
-    val members = sqLiteHelper.getAllValues()
 
     val (firstName, setFirstName) = remember { mutableStateOf("") }
     val (lastName, setLastName) = remember { mutableStateOf("") }
+    val members = remember { mutableStateOf(sqLiteHelper.getAllValues()) }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -70,7 +70,8 @@ fun InputScreen(modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-                    sqLiteHelper!!.insertValues(firstName, lastName)
+                    sqLiteHelper.insertValues(firstName, lastName)
+                    members.value = sqLiteHelper.getAllValues()
                 },
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
@@ -85,7 +86,11 @@ fun InputScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            DataList(members)
+            DataList(members.value) { member ->
+                sqLiteHelper.deleteByFirstName(member.firstName)
+                members.value = sqLiteHelper.getAllValues()
+            }
+
         }
     }
 }
