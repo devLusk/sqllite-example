@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,11 +38,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun InputScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val sqLiteHelper = SQLiteHelper(context)
+    val sqLiteHelper = remember { SQLiteHelper(context) }
 
-    val (firstName, setFirstName) = remember { mutableStateOf("") }
-    val (lastName, setLastName) = remember { mutableStateOf("") }
-    val members = remember { mutableStateOf(sqLiteHelper.getAllValues()) }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    val members = remember { sqLiteHelper.getAllValues().toMutableStateList() }
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
@@ -50,7 +53,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
         ) {
             ValidatedTextField(
                 value = firstName,
-                onValueChange = setFirstName,
+                onValueChange = { firstName = it },
                 label = "First name",
                 placeholder = "e.g: Lucas",
                 context = context
@@ -60,7 +63,7 @@ fun InputScreen(modifier: Modifier = Modifier) {
 
             ValidatedTextField(
                 value = lastName,
-                onValueChange = setLastName,
+                onValueChange = { lastName = it },
                 label = "Last Name",
                 placeholder = "e.g: Silva",
                 context = context
@@ -71,7 +74,11 @@ fun InputScreen(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     sqLiteHelper.insertValues(firstName, lastName)
-                    members.value = sqLiteHelper.getAllValues()
+                    members.clear()
+                    members.addAll(sqLiteHelper.getAllValues())
+
+                    firstName = ""
+                    lastName = ""
                 },
                 shape = RoundedCornerShape(20),
                 modifier = Modifier
@@ -86,11 +93,11 @@ fun InputScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            DataList(members.value) { member ->
+            DataList(members) { member ->
                 sqLiteHelper.deleteById(member.id)
-                members.value = sqLiteHelper.getAllValues()
+                members.clear()
+                members.addAll(sqLiteHelper.getAllValues())
             }
-
         }
     }
 }
